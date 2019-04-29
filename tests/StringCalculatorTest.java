@@ -63,13 +63,53 @@ public class StringCalculatorTest {
 
         @Test
         public void useDelimiterSpecified() {
-            assertEquals(StringCalculator.add("//;\n1;2"), 3);
+            assertEquals(StringCalculator.add("//;\n1;2;3;4"), 10);
         }
 
-        @Test(expected = IllegalArgumentException.class)
+        @Test
+        public void useDelimiterSpecifiedVersionTwo() {
+            assertEquals(StringCalculator.add("//@\n2@2@3"), 7);
+            assertEquals(StringCalculator.add("//.\n2.3.1"), 6);
+        }
+
+        @Test
+        public void useDelimiterSpecifiedVersionThree() {
+        assertEquals(StringCalculator.add("//$\n1$2$3$4"), 10);
+    }
+
+        @Rule
+        public ExpectedException expectedException = ExpectedException.none();
+
+        @Test
         public void throwsOnNegativeNumber() {
+            expectedException.expect(IllegalArgumentException.class);
+            expectedException.expectMessage("Negatives not allowed: -3");
             StringCalculator.add("-3");
         }
 
+        @Test
+        public void throwsOnNegativeNumbersWithAllNumbersInExceptionMessage() {
+            expectedException.expect(IllegalArgumentException.class);
+            expectedException.expectMessage("Negatives not allowed: -3,-5,-13");
+
+            StringCalculator.add("1,-3,5,-5,-13");
+        }
+
+        @Test
+        public void ignoreNumbersBiggerThan1000() {
+            assertEquals(StringCalculator.add("2,1001"), 2);
+        }
+
+        @Test
+        public void acceptsDelimiterOfArbitraryLength() {
+            assertEquals(StringCalculator.add("//[***]\n1***2***3"), 6);
+        }
+
+        @Test
+        public void acceptsMultipleDelimiters() {
+            assertEquals(StringCalculator.add("//[-][;]\n1-2;3"), 6);
+            assertEquals(StringCalculator.add("//[--][...]\n2--3...4"), 9);
+        }
 }
+
 
