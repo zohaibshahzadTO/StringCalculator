@@ -41,6 +41,7 @@
     The exception should list the number(s) that caused the exception
 
 <b>Bonus</b>
+
 1.) Numbers larger than 1000 should be ignored.
 
     a. Example “2,1001” - Result: 2
